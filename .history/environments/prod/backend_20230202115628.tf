@@ -13,28 +13,9 @@
 # limitations under the License.
 
 
-locals {
-  env = "prod"
-}
-
-provider "google" {
-  project = "${var.project_id}"
-}
-
-module "vpc" {
-  source  = "../../modules/vpc"
-  project = "${var.project_id}"
-  env     = "${local.env}"
-}
-
-module "http_server" {
-  source  = "../../modules/http_server"
-  project = "${var.project_id}"
-  subnet  = "${module.vpc.subnet}"
-}
-
-module "firewall" {
-  source  = "../../modules/firewall"
-  project = "${var.project_id}"
-  subnet  = "${module.vpc.subnet}"
+terraform {
+  backend "gcs" {
+    bucket = "PROJECT_ID-tfstate"
+    prefix = "env/prod"
+  }
 }

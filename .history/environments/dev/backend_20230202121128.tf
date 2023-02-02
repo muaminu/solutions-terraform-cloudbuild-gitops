@@ -12,29 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-locals {
-  env = "prod"
-}
-
-provider "google" {
-  project = "${var.project_id}"
-}
-
-module "vpc" {
-  source  = "../../modules/vpc"
-  project = "${var.project_id}"
-  env     = "${local.env}"
-}
-
-module "http_server" {
-  source  = "../../modules/http_server"
-  project = "${var.project_id}"
-  subnet  = "${module.vpc.subnet}"
-}
-
-module "firewall" {
-  source  = "../../modules/firewall"
-  project = "${var.project_id}"
-  subnet  = "${module.vpc.subnet}"
+terraform {
+ backend "gcs" {
+   bucket  = "zbi-terraform-test"
+   prefix  = "terraform/acm/state"
+ }
 }
